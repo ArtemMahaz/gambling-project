@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\BetController;
+use App\Http\Controllers\AdminController;
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
@@ -25,4 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/games/{slug}/play', [BetController::class, 'play']);
     Route::get('/bets', [BetController::class, 'history']);
 
+    Route::middleware(['auth:sanctum', 'is_admin'])->prefix('admin')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard']);
+        Route::get('/users', [AdminController::class, 'users']);
+        Route::get('/users/{id}', [AdminController::class, 'showUser']);
+        Route::patch('/users/{id}/ban', [AdminController::class, 'banUser']);
+        Route::patch('/games/{id}/toggle', [AdminController::class, 'toggleGame']);
+    });
 });
