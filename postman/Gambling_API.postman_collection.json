@@ -1,0 +1,326 @@
+{
+  "info": {
+    "name": "Gambling API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000/api"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Test User\",\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/register" }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var data = pm.response.json();",
+                  "if (data.token) {",
+                  "    pm.collectionVariables.set('token', data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/login" }
+          }
+        },
+        {
+          "name": "Login (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var data = pm.response.json();",
+                  "if (data.token) {",
+                  "    pm.collectionVariables.set('token', data.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin@gambling.com\",\n    \"password\": \"admin123\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/login" }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/logout" }
+          }
+        },
+        {
+          "name": "Get User",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/user" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Wallet",
+      "item": [
+        {
+          "name": "Get Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/wallet" }
+          }
+        },
+        {
+          "name": "Deposit",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"amount\": 500\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/wallet/deposit" }
+          }
+        },
+        {
+          "name": "Withdraw",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"amount\": 50\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/wallet/withdraw" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Games",
+      "item": [
+        {
+          "name": "List Games",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/games" }
+          }
+        },
+        {
+          "name": "Get Game (Coin Flip)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/games/coin-flip" }
+          }
+        },
+        {
+          "name": "Play Coin Flip",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"amount\": 10,\n    \"choice\": \"heads\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/games/coin-flip/play" }
+          }
+        },
+        {
+          "name": "Play Dice Roll",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"amount\": 20,\n    \"choice\": \"3\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/games/dice-roll/play" }
+          }
+        },
+        {
+          "name": "Play Slot Machine",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"amount\": 10,\n    \"choice\": \"spin\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{base_url}}/games/slot-machine/play" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "History",
+      "item": [
+        {
+          "name": "Bet History",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/bets" }
+          }
+        },
+        {
+          "name": "Transaction History",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/transactions" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/admin/dashboard" }
+          }
+        },
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/admin/users" }
+          }
+        },
+        {
+          "name": "Show User",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/admin/users/1" }
+          }
+        },
+        {
+          "name": "Ban/Unban User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/admin/users/1/ban" }
+          }
+        },
+        {
+          "name": "Toggle Game",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": { "raw": "{{base_url}}/admin/games/1/toggle" }
+          }
+        }
+      ]
+    }
+  ]
+}
